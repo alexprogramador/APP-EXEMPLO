@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: api-pessoas
+    runtime: python
+
+    buildCommand: "./build.sh"
+
+    startCommand: "gunicorn myapp.wsgi:application --bind 0.0.0.0:$PORT"
+
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+
+      - key: DEBUG
+        value: "False"
+
+      - key: DATABASE_URL
+        fromDatabase:
+          name: api-pessoas-db
+          property: connectionString
+
+databases:
+  - name: api-pessoas-db
+    plan: free
