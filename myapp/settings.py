@@ -30,39 +30,17 @@ DEBUG = os.environ.get("DEBUG", "True").lower() == "true"
 # HOSTS PERMITIDOS
 # ==================================================
 
+
+
+
+# ==================================================
+# HOSTS PERMITIDOS
+# ==================================================
+
 ALLOWED_HOSTS = [
-    "app-exemplo.onrender.com",
-    "localhost",
-    "127.0.0.1",
+    "*",
 ]
 
-
-# Render fornece automaticamente o hostname externo
-RENDER_EXTERNAL_HOSTNAME = os.environ.get(
-    "RENDER_EXTERNAL_HOSTNAME"
-)
-
-if RENDER_EXTERNAL_HOSTNAME:
-    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
-
-
-# Permite hosts adicionais através da variável
-# de ambiente ALLOWED_HOSTS
-EXTRA_ALLOWED_HOSTS = os.environ.get(
-    "ALLOWED_HOSTS",
-    ""
-)
-
-if EXTRA_ALLOWED_HOSTS:
-    ALLOWED_HOSTS.extend(
-        host.strip()
-        for host in EXTRA_ALLOWED_HOSTS.split(",")
-        if host.strip()
-    )
-
-
-# Remove hosts duplicados
-ALLOWED_HOSTS = list(set(ALLOWED_HOSTS))
 
 
 # ==================================================
