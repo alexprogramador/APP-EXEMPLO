@@ -12,6 +12,7 @@ staticfiles/
 
 # Banco SQLite local
 db.sqlite3
+db_backup.sqlite3
 
 # Variáveis de ambiente
 .env
