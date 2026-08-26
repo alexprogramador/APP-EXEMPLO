@@ -15,17 +15,38 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 SECRET_KEY = os.environ.get(
-    'SECRET_KEY',
-    'django-insecure-&6prrj=8=$#h^rk43wla@^t8)#h46an*6erxq5d4p47bc&ntny'
+    "SECRET_KEY",
+    "django-insecure-&6prrj=8=$#h^rk43wla@^t8)#h46an*6erxq5d4p47bc&ntny"
 )
 
 
-# Em desenvolvimento: True
-# No Render: False
-DEBUG = os.environ.get('DEBUG', 'True') == 'True'
+# ==================================================
+# DEBUG
+# ==================================================
+
+DEBUG = os.environ.get("DEBUG", "True").lower() == "true"
 
 
-ALLOWED_HOSTS = ["*"]
+# ==================================================
+# HOSTS PERMITIDOS
+# ==================================================
+
+# Host fornecido automaticamente pelo Render
+RENDER_EXTERNAL_HOSTNAME = os.environ.get(
+    "RENDER_EXTERNAL_HOSTNAME"
+)
+
+ALLOWED_HOSTS = [
+    "localhost",
+    "127.0.0.1",
+]
+
+# Adiciona automaticamente o domínio do Render
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+
+# Mantém também o domínio atual do projeto
+ALLOWED_HOSTS.append("app-exemplo.onrender.com")
 
 
 # ==================================================
@@ -34,18 +55,18 @@ ALLOWED_HOSTS = ["*"]
 
 INSTALLED_APPS = [
 
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
 
     # Django REST Framework
-    'rest_framework',
+    "rest_framework",
 
     # Nossa aplicação
-    'core',
+    "core",
 ]
 
 
@@ -55,22 +76,22 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
 
-    'django.middleware.security.SecurityMiddleware',
+    "django.middleware.security.SecurityMiddleware",
 
-    # WhiteNoise para arquivos estáticos no Render
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+    # WhiteNoise
+    "whitenoise.middleware.WhiteNoiseMiddleware",
 
-    'django.contrib.sessions.middleware.SessionMiddleware',
+    "django.contrib.sessions.middleware.SessionMiddleware",
 
-    'django.middleware.common.CommonMiddleware',
+    "django.middleware.common.CommonMiddleware",
 
-    'django.middleware.csrf.CsrfViewMiddleware',
+    "django.middleware.csrf.CsrfViewMiddleware",
 
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
 
-    'django.contrib.messages.middleware.MessageMiddleware',
+    "django.contrib.messages.middleware.MessageMiddleware",
 
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
 
@@ -78,7 +99,7 @@ MIDDLEWARE = [
 # URLS
 # ==================================================
 
-ROOT_URLCONF = 'myapp.urls'
+ROOT_URLCONF = "myapp.urls"
 
 
 # ==================================================
@@ -88,21 +109,21 @@ ROOT_URLCONF = 'myapp.urls'
 TEMPLATES = [
 
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
 
-        'DIRS': [],
+        "DIRS": [],
 
-        'APP_DIRS': True,
+        "APP_DIRS": True,
 
-        'OPTIONS': {
+        "OPTIONS": {
 
-            'context_processors': [
+            "context_processors": [
 
-                'django.template.context_processors.request',
+                "django.template.context_processors.request",
 
-                'django.contrib.auth.context_processors.auth',
+                "django.contrib.auth.context_processors.auth",
 
-                'django.contrib.messages.context_processors.messages',
+                "django.contrib.messages.context_processors.messages",
 
             ],
 
@@ -117,7 +138,7 @@ TEMPLATES = [
 # WSGI
 # ==================================================
 
-WSGI_APPLICATION = 'myapp.wsgi.application'
+WSGI_APPLICATION = "myapp.wsgi.application"
 
 
 # ==================================================
@@ -126,10 +147,14 @@ WSGI_APPLICATION = 'myapp.wsgi.application'
 
 DATABASES = {
 
-    'default': dj_database_url.config(
+    "default": dj_database_url.config(
 
-        # Localmente usa SQLite
-        # No Render, DATABASE_URL será usada automaticamente
+        # No Render:
+        # utiliza DATABASE_URL / PostgreSQL
+
+        # Localmente:
+        # utiliza SQLite
+
         default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
 
         conn_max_age=600,
@@ -148,23 +173,23 @@ DATABASES = {
 AUTH_PASSWORD_VALIDATORS = [
 
     {
-        'NAME':
-        'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        "NAME":
+        "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
 
     {
-        'NAME':
-        'django.contrib.auth.password_validation.MinimumLengthValidator',
+        "NAME":
+        "django.contrib.auth.password_validation.MinimumLengthValidator",
     },
 
     {
-        'NAME':
-        'django.contrib.auth.password_validation.CommonPasswordValidator',
+        "NAME":
+        "django.contrib.auth.password_validation.CommonPasswordValidator",
     },
 
     {
-        'NAME':
-        'django.contrib.auth.password_validation.NumericPasswordValidator',
+        "NAME":
+        "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 
 ]
@@ -174,9 +199,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # INTERNACIONALIZAÇÃO
 # ==================================================
 
-LANGUAGE_CODE = 'pt-br'
+LANGUAGE_CODE = "pt-br"
 
-TIME_ZONE = 'America/Sao_Paulo'
+TIME_ZONE = "America/Sao_Paulo"
 
 USE_I18N = True
 
@@ -187,16 +212,17 @@ USE_TZ = True
 # ARQUIVOS ESTÁTICOS
 # ==================================================
 
-STATIC_URL = 'static/'
+STATIC_URL = "static/"
 
-# Pasta onde o Django irá reunir os arquivos estáticos
-# durante o deploy no Render.
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 
-# WhiteNoise
+# ==================================================
+# WHITENOISE
+# ==================================================
+
 STATICFILES_STORAGE = (
-    'whitenoise.storage.CompressedManifestStaticFilesStorage'
+    "whitenoise.storage.CompressedManifestStaticFilesStorage"
 )
 
 
@@ -206,11 +232,11 @@ STATICFILES_STORAGE = (
 
 REST_FRAMEWORK = {
 
-    'DEFAULT_RENDERER_CLASSES': [
+    "DEFAULT_RENDERER_CLASSES": [
 
-        'rest_framework.renderers.JSONRenderer',
+        "rest_framework.renderers.JSONRenderer",
 
-        'rest_framework.renderers.BrowsableAPIRenderer',
+        "rest_framework.renderers.BrowsableAPIRenderer",
 
     ],
 
@@ -218,13 +244,10 @@ REST_FRAMEWORK = {
 
 
 # ==================================================
-# SEGURANÇA PARA O RENDER
+# SEGURANÇA HTTPS / RENDER
 # ==================================================
 
-# Permite que o Render informe que a requisição original
-# utiliza HTTPS.
-
 SECURE_PROXY_SSL_HEADER = (
-    'HTTP_X_FORWARDED_PROTO',
-    'https',
+    "HTTP_X_FORWARDED_PROTO",
+    "https",
 )
