@@ -25,7 +25,9 @@ SECRET_KEY = os.environ.get(
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ['app-exemplo.onrender.com', 'localhost', '127.0.0.1', '*']
+
+CSRF_TRUSTED_ORIGINS = ['https://app-exemplo.onrender.com']
 
 
 # ==================================================
