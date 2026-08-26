@@ -28,13 +28,12 @@ DEBUG = os.environ.get("DEBUG", "False").lower() in ["true", "1", "t"]
 # HOSTS PERMITIDOS E CSRF
 # ==================================================
 
-RENDER_EXTERNAL_HOSTNAME = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "*").split(",")
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "app-exemplo.onrender.com", ".onrender.com"]
-if RENDER_EXTERNAL_HOSTNAME:
+RENDER_EXTERNAL_HOSTNAME = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
+if RENDER_EXTERNAL_HOSTNAME and RENDER_EXTERNAL_HOSTNAME not in ALLOWED_HOSTS:
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
-# Django NÃO aceita wildcards (*) em CSRF_TRUSTED_ORIGINS. As URLs devem ser explícitas.
 CSRF_TRUSTED_ORIGINS = [
     "https://app-exemplo.onrender.com",
 ]
