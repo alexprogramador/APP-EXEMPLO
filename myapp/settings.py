@@ -13,7 +13,6 @@ import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 SECRET_KEY = os.environ.get(
     "SECRET_KEY",
     "django-insecure-&6prrj=8=$#h^rk43wla@^t8)#h46an*6erxq5d4p47bc&ntny"
@@ -27,11 +26,18 @@ SECRET_KEY = os.environ.get(
 DEBUG = os.environ.get("DEBUG", "True").lower() == "true"
 
 
+# ==================================================
+# HOSTS PERMITIDOS
+# ==================================================
+
 ALLOWED_HOSTS = [
+    "app-exemplo.onrender.com",
     "localhost",
     "127.0.0.1",
 ]
 
+
+# Render fornece automaticamente o hostname externo
 RENDER_EXTERNAL_HOSTNAME = os.environ.get(
     "RENDER_EXTERNAL_HOSTNAME"
 )
@@ -39,6 +45,9 @@ RENDER_EXTERNAL_HOSTNAME = os.environ.get(
 if RENDER_EXTERNAL_HOSTNAME:
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
+
+# Permite hosts adicionais através da variável
+# de ambiente ALLOWED_HOSTS
 EXTRA_ALLOWED_HOSTS = os.environ.get(
     "ALLOWED_HOSTS",
     ""
@@ -50,6 +59,10 @@ if EXTRA_ALLOWED_HOSTS:
         for host in EXTRA_ALLOWED_HOSTS.split(",")
         if host.strip()
     )
+
+
+# Remove hosts duplicados
+ALLOWED_HOSTS = list(set(ALLOWED_HOSTS))
 
 
 # ==================================================
@@ -64,8 +77,10 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 
+    # Django REST Framework
     "rest_framework",
 
+    # Aplicação
     "core",
 ]
 
@@ -77,6 +92,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
 
+    # WhiteNoise para arquivos estáticos
     "whitenoise.middleware.WhiteNoiseMiddleware",
 
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -107,12 +123,17 @@ ROOT_URLCONF = "myapp.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
+
         "DIRS": [],
+
         "APP_DIRS": True,
+
         "OPTIONS": {
             "context_processors": [
                 "django.template.context_processors.request",
+
                 "django.contrib.auth.context_processors.auth",
+
                 "django.contrib.messages.context_processors.messages",
             ],
         },
