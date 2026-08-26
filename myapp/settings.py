@@ -27,26 +27,29 @@ SECRET_KEY = os.environ.get(
 DEBUG = os.environ.get("DEBUG", "True").lower() == "true"
 
 
-# ==================================================
-# HOSTS PERMITIDOS
-# ==================================================
-
-# Host fornecido automaticamente pelo Render
-RENDER_EXTERNAL_HOSTNAME = os.environ.get(
-    "RENDER_EXTERNAL_HOSTNAME"
-)
-
 ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
 ]
 
-# Adiciona automaticamente o domínio do Render
+RENDER_EXTERNAL_HOSTNAME = os.environ.get(
+    "RENDER_EXTERNAL_HOSTNAME"
+)
+
 if RENDER_EXTERNAL_HOSTNAME:
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
-# Mantém também o domínio atual do projeto
-ALLOWED_HOSTS.append("app-exemplo.onrender.com")
+EXTRA_ALLOWED_HOSTS = os.environ.get(
+    "ALLOWED_HOSTS",
+    ""
+)
+
+if EXTRA_ALLOWED_HOSTS:
+    ALLOWED_HOSTS.extend(
+        host.strip()
+        for host in EXTRA_ALLOWED_HOSTS.split(",")
+        if host.strip()
+    )
 
 
 # ==================================================
@@ -54,7 +57,6 @@ ALLOWED_HOSTS.append("app-exemplo.onrender.com")
 # ==================================================
 
 INSTALLED_APPS = [
-
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -62,10 +64,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 
-    # Django REST Framework
     "rest_framework",
 
-    # Nossa aplicação
     "core",
 ]
 
@@ -75,10 +75,8 @@ INSTALLED_APPS = [
 # ==================================================
 
 MIDDLEWARE = [
-
     "django.middleware.security.SecurityMiddleware",
 
-    # WhiteNoise
     "whitenoise.middleware.WhiteNoiseMiddleware",
 
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -107,30 +105,18 @@ ROOT_URLCONF = "myapp.urls"
 # ==================================================
 
 TEMPLATES = [
-
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-
         "DIRS": [],
-
         "APP_DIRS": True,
-
         "OPTIONS": {
-
             "context_processors": [
-
                 "django.template.context_processors.request",
-
                 "django.contrib.auth.context_processors.auth",
-
                 "django.contrib.messages.context_processors.messages",
-
             ],
-
         },
-
     },
-
 ]
 
 
@@ -146,23 +132,11 @@ WSGI_APPLICATION = "myapp.wsgi.application"
 # ==================================================
 
 DATABASES = {
-
     "default": dj_database_url.config(
-
-        # No Render:
-        # utiliza DATABASE_URL / PostgreSQL
-
-        # Localmente:
-        # utiliza SQLite
-
         default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
-
         conn_max_age=600,
-
         ssl_require=not DEBUG,
-
     )
-
 }
 
 
@@ -171,27 +145,22 @@ DATABASES = {
 # ==================================================
 
 AUTH_PASSWORD_VALIDATORS = [
-
     {
         "NAME":
         "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
-
     {
         "NAME":
         "django.contrib.auth.password_validation.MinimumLengthValidator",
     },
-
     {
         "NAME":
         "django.contrib.auth.password_validation.CommonPasswordValidator",
     },
-
     {
         "NAME":
         "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
-
 ]
 
 
@@ -231,15 +200,10 @@ STATICFILES_STORAGE = (
 # ==================================================
 
 REST_FRAMEWORK = {
-
     "DEFAULT_RENDERER_CLASSES": [
-
         "rest_framework.renderers.JSONRenderer",
-
         "rest_framework.renderers.BrowsableAPIRenderer",
-
     ],
-
 }
 
 
