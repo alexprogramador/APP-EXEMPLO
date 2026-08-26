@@ -31,15 +31,16 @@ DEBUG = os.environ.get("DEBUG", "False").lower() in ["true", "1", "t"]
 # HOSTS PERMITIDOS E CSRF
 # ==================================================
 
-# Lê o hostname dinâmico do Render ou permite localhost/Render por padrão
 RENDER_EXTERNAL_HOSTNAME = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "app-exemplo.onrender.com", ".onrender.com"]
 if RENDER_EXTERNAL_HOSTNAME:
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
-# Necessário para requisições POST/PUT do painel e APIs em HTTPS no Render
-CSRF_TRUSTED_ORIGINS = []
+CSRF_TRUSTED_ORIGINS = [
+    "https://app-exemplo.onrender.com",
+    "https://*.onrender.com",
+]
 if RENDER_EXTERNAL_HOSTNAME:
     CSRF_TRUSTED_ORIGINS.append(f"https://{RENDER_EXTERNAL_HOSTNAME}")
 
@@ -116,7 +117,6 @@ TEMPLATES = [
 # BANCO DE DADOS
 # ==================================================
 
-# Lê a variável DATABASE_URL do Render ou usa SQLite localmente
 DATABASE_URL = os.environ.get("DATABASE_URL")
 
 if DATABASE_URL:
